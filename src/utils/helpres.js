@@ -48,7 +48,7 @@ export const sendMail = async ({
               : 'origin',
           locals,
           message: {
-            from: 'Dokatis <admin@dokatisdev.com>',
+            from: '',
             to: to,
             subject: subject,
             attachments: attachments,
