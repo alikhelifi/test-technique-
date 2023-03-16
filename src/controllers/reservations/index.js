@@ -143,6 +143,12 @@ export async function cancel(req, res, next) {
         `Reservation n'existe pas`,
       );
     }
+    const existRoute = await Route.findOne({
+      routeId: existUserReservation.routeId,
+    });
+    if (!existRoute) {
+      throw new APIError(HTTPStatus.BAD_REQUEST, Error, `Trajet n'existe pas`);
+    }
     let result;
     result = await UserReservation.updateOne(
       {
@@ -154,6 +160,14 @@ export async function cancel(req, res, next) {
     if (!result) {
       throw new APIError(HTTPStatus.BAD_REQUEST, Error, 'Reservation non crée');
     }
+    await Route.updateOne(
+      { routeId: existUserReservation.routeId },
+      {
+        nbrSeatList:
+          (existRoute.nbrSeatList || 0) -
+          parseInt(existUserReservation.tickets.length),
+      },
+    );
     const send = await sendMail({
       from: '',
       to: [user.email],

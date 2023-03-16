@@ -9,7 +9,7 @@ module.exports = {
     contentBasePublicPath: '/assets',
     hot: true,
     host: '0.0.0.0',
-    port: '8202',
+    port: '8004',
     stats: 'errors-only',
     disableHostCheck: true,
     overlay: {
@@ -18,7 +18,7 @@ module.exports = {
     },
     proxy: {
       '/': {
-        target: 'http://127.0.0.1:8202/',
+        target: 'http://127.0.0.1:8004/',
         secure: false,
         changeOrigin: true,
         logLevel: 'debug',

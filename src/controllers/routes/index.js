@@ -50,33 +50,12 @@ export async function getAvailableRoutesTickets(req, res, next) {
     let existRouteTickets = [];
     if (routes && routes.length > 0) {
       for await (let route of routes) {
-        let existTickets = [];
-        result = await UserReservation.find(
-          {
-            routeId: route.routeId,
-          },
-          { tickets: 1 },
-        );
-        let tickets = [];
-        if (result && result.length > 0) {
-          for await (let item of result) {
-            tickets.push(...item.tickets);
-          }
-        }
-        console.log(tickets);
-        if (tickets.length > 0) {
-          existTickets.push(
-            ...(await Ticket.find({
-              ticketId: { $nin: await removeDuplicates(tickets) },
-            })),
-          );
-          existRouteTickets.push({
-            routeId: route.routeId,
-            routeStart: route.routeStart,
-            routeEnd: route.routeEnd,
-            existTickets,
-          });
-        }
+        existRouteTickets.push({
+          routeId: route.routeId,
+          routeStart: route.routeStart,
+          routeEnd: route.routeEnd,
+          nbrSeatList: route.seatList - (parseInt(route.nbrSeatList) || 0),
+        });
       }
     }
 
